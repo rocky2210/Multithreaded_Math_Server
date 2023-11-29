@@ -26,9 +26,9 @@ A simple multithreaded math server created in LAHTP Advanced course that evaluat
 2. Navigate to the project directory:
 
    ```bash
-   cd multithreaded-math-server
+   cd multithreaded_math_server
    ```
-3. First instal `bc` tool in your PC
+3. First install `bc` tool in your PC
 
     ```
     $ sudo apt-get install bc
