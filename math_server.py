@@ -1,8 +1,6 @@
 from subprocess import Popen, STDOUT, PIPE
 from threading import Thread
-import colorama
-
-colorama.init(autoreset=True)
+from colr import *
 
 def start_new_math_thread(conn, addr):
     t = MathServerCommnicationThread(conn, addr)
@@ -19,7 +17,8 @@ class ProcessOutputThread(Thread):
             try:
                 self.conn.sendall(self.proc.stdout.readline())
             except Exception as e:
-                print(f"Error sending data in  Host {self.addr[0]}:Port {self.addr[1]} - error {e}")
+                print(f"Error sending data in  Host {self.addr[0]}: Port {self.addr[1]} - error {e}")
+
    
 class MathServerCommnicationThread(Thread):
     def __init__(self,conn,addr):
@@ -29,8 +28,11 @@ class MathServerCommnicationThread(Thread):
 
     def run(self):
         # Print connected device information
-        print(f"{colorama.Fore.BLUE}{colorama.Style.BRIGHT}{self.addr[0]} {colorama.Style.RESET_ALL}connected with back port {colorama.Fore.GREEN}{colorama.Style.BRIGHT}{self.addr[1]}...!")
-        message = (colorama.Fore.YELLOW +"\n\t\tSimple Multithreaded Math Server💻 \n\nGive any math expressions, and I will answer you ...!\n\nEnter \"quit\" to exit ❌ \n\n$" +colorama.Style.RESET_ALL).encode()
+        print(f"{fb}{stb}{self.addr[0]} {rs}connected with back port {fg}{stb}{self.addr[1]}")
+        message = (fy + stb + "\n\t\tSimple Multithreaded Math Server💻 \n\n"+
+                   fm + stb + "Give any math expressions, and I will answer you ...!\n\n"+
+                   fm + stb + "Enter \"quit\" to exit ❌ \n\n" +rs).encode()
+        
         self.conn.sendall(message)
 
         p = Popen(['bc'], stdout=PIPE, stdin=PIPE, stderr=STDOUT)
@@ -39,33 +41,35 @@ class MathServerCommnicationThread(Thread):
 
         while not p.stdout.closed or not self.conn._closed:
             try:
+                # Data receiving
                 data = self.conn.recv(1024)
                 if not data:
+                    # disconnected message
+                    print(f"{fr}{stb}{self.addr[0]}{rs} : {fy}{stb}{self.addr[1]} is disconnected..!{rs}\n")
                     break
                 else:
                     try:
                         data = data.decode()
                         query = data.strip()
-                        if query == 'quit':
-                        # if query == 'quit' or query == 'exit':
+                        if query.lower() == 'quit':
+                        # if query == 'quit' or query == 'exit': 
                             p.communicate(query.encode(), timeout=1)
                             if p.poll() is not None:
-                                print(f"{colorama.Fore.RED}{colorama.Style.BRIGHT}{self.addr[0]}{colorama.Style.RESET_ALL} : {colorama.Fore.YELLOW}{colorama.Style.BRIGHT}{self.addr[1]} is disconnected..!\n")
                                 break
                         elif query == 'help':
-                            help_message = (f"{colorama.Fore.BLUE}{colorama.Style.BRIGHT}\nAvailable Commands: \n"
+                            help_message = (f"{fb}{stb}\nAvailable Commands: \n"
                                             "-> Enter any valid math expression to get the result.\n"
                                             "-> Use 'quit' to exit the server.\n"
-                                            f"-> Use 'help' to display this message.\n\n{colorama.Style.RESET_ALL}").encode()
+                                            f"-> Use 'help' to display this message.\n\n{rs}").encode()
                             self.conn.sendall(help_message)
                         else:
                             query = query + '\n'
                             p.stdin.write(query.encode())
                             p.stdin.flush()
                     except Exception as e:
-                        print(f"Error processing data in Host {self.addr[0]}:Port {self.addr[1]} - error {e}")
+                        print(f"Error processing data in Host {self.addr[0]}: Port {self.addr[1]} - error {e}")
             except:
-                print(f"Error receiving data in Host {self.addr[0]}:Port {self.addr[1]} - error {e}")
+                print(f"Error receiving data in Host {self.addr[0]}: Port {self.addr[1]} - error {e}")
         self.conn.close()
                         
 

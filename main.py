@@ -1,20 +1,16 @@
 import socket
 from math_server import start_new_math_thread
-import colorama
+from colr import *
 
-colorama.init(autoreset=True)
 # HOST = ''
 # PORT = 8880
+HOST = input(fg + stb +"Enter the host (press Enter for default): "+rs) or ''
+PORT = int(input(fb + stb +"Enter the port: "+rs))
 
-HOST = input(colorama.Fore.GREEN + colorama.Style.BRIGHT +"Enter the host (press Enter for default): "+colorama.Style.RESET_ALL) or ''
-PORT = int(input(colorama.Fore.BLUE+ colorama.Style.BRIGHT +"Enter the port: "+colorama.Style.RESET_ALL))
-print(colorama.Fore.YELLOW + colorama.Style.BRIGHT + f"\n\t\tMultithreaded Math Server\n\n" + colorama.Fore.CYAN +f"Started and listening on {colorama.Fore.GREEN}{colorama.Style.BRIGHT}{HOST}{colorama.Style.RESET_ALL}:{colorama.Fore.BLUE}{colorama.Style.BRIGHT}{PORT}\n")
+print(fy+ stb + f"\n\t\tMultithreaded Math Server\n\n" + fc +f"Started and listening on {fg}{stb}{HOST}{rs}:{fb}{stb}{PORT}{rs}\n")
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-# setsockopt (level,option,value)
 s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR,1)
-# Bind
 s.bind((HOST, PORT))
-# Lisiten 
 s.listen()
 
 while True:
