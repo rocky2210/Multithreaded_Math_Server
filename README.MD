@@ -45,7 +45,7 @@ A simple multithreaded math server created in LAHTP Advanced course that evaluat
 6. Connect to the server using a client.py or connet with telnet, netcat, .etc
 
     ```
-    $ python3 main.py
+    $ python3 client.py
     ```
 
 7. Enter math expressions to get results. Use the `quit` command to exit.
