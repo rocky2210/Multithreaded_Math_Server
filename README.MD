@@ -20,7 +20,7 @@ A simple multithreaded math server created in LAHTP Advanced course that evaluat
 1. Clone the repository:
 
    ```bash
-   git clone https://git.selfmade.ninja:rocky/multithreaded_math_server.git
+   git clone git@github.com:rocky2210/Multithreaded_Math_Server.git
    ```
 
 2. Navigate to the project directory:
